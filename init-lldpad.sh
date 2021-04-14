@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for i in `ls /sys/class/net/ | grep 'eth\|ens\|eno'` ;
+for i in `ls /sys/class/net/ | grep '^eth\|ens\|eno'` ;
 
 do echo "enabling lldp for interface: $i" ;
 

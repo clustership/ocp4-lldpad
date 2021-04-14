@@ -36,10 +36,15 @@ spec:
         - -c
         - --
         args:
-        - sleep infinity
+        - /usr/sbin/lldpad -p -V 6
         image: quay.io/xymox/lldpad-ubi8:0.0.1
         imagePullPolicy: Always
         name: lldpad
+        env:
+        - name: LLDPAD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
         resources:
           requests:
             memory: "200Mi"
