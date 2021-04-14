@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: lldpad
+  name: lldpad
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lldpad
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: lldpad
+      name: lldpad
+    spec:
+      hostNetwork: true
+      serviceAccount: lldpad
+      serviceAccountName: lldpad
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchFields:
+              - key: metadata.name
+                operator: In
+                values:
+                - worker-1
+      containers:
+      - command:
+        - /bin/bash
+        - -c
+        - --
+        args:
+        - sleep infinity
+        image: quay.io/xymox/lldpad-ubi8:0.0.1
+        imagePullPolicy: Always
+        name: lldpad
+        resources:
+          requests:
+            memory: "200Mi"
+            cpu: "100m"
+          limits:
+            memory: "200Mi"
+            cpu: "250m"
+        securityContext:
+          privileged: true
+          capabilities:
+            add:
+            - NET_ADMIN
+            - NET_RAW

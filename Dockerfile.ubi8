@@ -1,0 +1,37 @@
+FROM registry.redhat.io/ubi8
+
+# Debug toolkit
+#
+# Build it with:
+#
+# % podman build -t ubi8-debug-toolkit --rm -f Dockerfile.ubi8 .
+#
+# Run it with
+#
+# % oc run -i --tty --rm debug --image=quay.io/xymox/ubi8-debug-toolkit --restart=Never -- /bin/bash
+#
+
+MAINTAINER Philippe HUET <phuet@redhat.com>
+
+LABEL io.k8s.description="ubi8 OpenShift debug toolkit as a Pod." \
+      io.k8s.display-name="ubi8-debug-toolkit" \
+      io.openshift.tags="toolkit,debug,troubleshoot" \
+      io.openshift.non-scalable="true"
+
+# Install OpenLDAP Server, give it permissionst to bind to low ports
+RUN dnf install -y bind-utils \
+                   iputils \
+                   iproute \
+                   procps-ng \
+                   lsof \
+                   nmap-ncat \
+                   lldpad \
+        && \
+    dnf clean all -y
+
+RUN mkdir -p /var/lib/lldpad/ \
+    && chgrp root /var/lib/lldpad \
+    && chmod g+rwx /var/lib/lldpad
+
+USER 0
+CMD ["/bin/sh", "-c", "/usr/sbin/lldpad -p -V 10"]
