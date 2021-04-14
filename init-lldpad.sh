@@ -1,5 +1,10 @@
 #!/bin/bash
 
+while lldptool ping 2> /dev/null ; ((ret=$?)) ;do
+  echo waiting for lldpad to be ready: $ret
+  sleep 3;
+done
+
 for i in `ls /sys/class/net/ | grep '^eth\|ens\|eno'` ;
 
 do echo "enabling lldp for interface: $i" ;

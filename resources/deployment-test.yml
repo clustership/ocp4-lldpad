@@ -45,6 +45,9 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        volumeMounts:
+        - name: var-lib-lldpad
+          mountPath: /var/lib/lldpad
         resources:
           requests:
             memory: "200Mi"
@@ -53,8 +56,37 @@ spec:
             memory: "200Mi"
             cpu: "250m"
         securityContext:
-          privileged: true
+          runAsUser: 0
           capabilities:
             add:
             - NET_ADMIN
             - NET_RAW
+      - command:
+        - /bin/bash
+        - -c
+        - --
+        args:
+        - sleep infinity
+        image: quay.io/xymox/lldpad-ubi8:0.0.1
+        imagePullPolicy: Always
+        name: lldptool
+        env:
+        - name: LLDPAD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        volumeMounts:
+        - name: var-lib-lldpad
+          mountPath: /var/lib/lldpad
+        resources:
+          requests:
+            memory: "200Mi"
+            cpu: "100m"
+          limits:
+            memory: "200Mi"
+            cpu: "250m"
+        securityContext:
+          runAsUser: 0
+      volumes:
+      - name: var-lib-lldpad
+        emptyDir: {}
