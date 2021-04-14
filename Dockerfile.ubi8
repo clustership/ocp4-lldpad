@@ -33,6 +33,6 @@ RUN mkdir -p /var/lib/lldpad/ \
     && chgrp root /var/lib/lldpad \
     && chmod g+rwx /var/lib/lldpad
 
-COPY init-lldapd.sh /
-USER 0
+COPY init-lldpad.sh /
+USER 1001
 CMD ["/bin/sh", "-c", "/usr/sbin/lldpad -p -V 10"]
