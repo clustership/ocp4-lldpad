@@ -1,5 +1,5 @@
 #!/bin/sh
 
-lldptool ping > /dev/null
+/usr/sbin/lldpcli show statistics > /dev/null
 
 exit $?

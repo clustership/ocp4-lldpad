@@ -21,22 +21,13 @@ spec:
       hostNetwork: true
       serviceAccount: lldpad
       serviceAccountName: lldpad
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchFields:
-              - key: metadata.name
-                operator: In
-                values:
-                - host-01.sno-01.clustership.com
       containers:
       - command:
         - /bin/bash
         - -c
         - --
         args:
-        - /usr/sbin/lldpad -p -V 6
+        - sleep infinity
         image: quay.io/xymox/lldpad-ubi8:0.0.1
         imagePullPolicy: Always
         name: lldpad
